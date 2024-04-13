@@ -1,0 +1,228 @@
+openapi: 3.0.0
+info:
+  title: Trabalho 1 - API de Consulta de Pedidos
+  version: 1.0.0
+  contact:
+    email: mancio105@gmail.com
+
+servers:
+  - url: https://sistemax-stage.com.br/api
+  - url: https://sistemax.com.br/api
+
+paths:
+  /pedidos:
+    get:
+      tags:
+        - Pedido
+      summary: Retorna a lista de pedidos com opção de filtragem
+      parameters:
+
+        - name: codigoPedido
+          in: query
+          schema:
+            type: string
+          description: Filtra por código do pedido
+
+        - name: codigoCliente
+          in: query
+          schema:
+            type: string
+          description: Filtra por código do cliente
+
+        - name: cpfCliente
+          in: query
+          schema:
+            type: string
+          description: Filtra por CPF do cliente
+
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [ pago, enviado, aguardando pagamento, cancelado ]
+          description: Filtra por status do pedido
+
+        - name: dataMenorQue
+          in: query
+          schema:
+            type: string
+            format: date
+          description: Filtra pedidos com data menor que o valor especificado
+        
+        - name: dataMaiorQue
+          in: query
+          schema:
+            type: string
+            format: date
+          description: Filtra pedidos com data maior que o valor especificado
+     
+      responses:
+        '200':
+          description: Quando os pedidos são retornados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PedidosResponse'
+
+  /pedidos/{id}/itens:
+    get:
+      tags:
+        - Pedido
+      summary: Retorna os itens de um pedido específico
+      parameters:
+        
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID do pedido para consulta de seus itens
+      
+      responses:
+        '200':
+          description: Quando os itens do pedido específico são encontrados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemPedido'
+        '404':
+          description: Pedido não encontrado.
+
+components:
+  schemas:
+
+    PedidosResponse:
+      type: object
+      properties:
+        codigo:
+          type: string
+          example: 123
+          description: código do pedido
+        data:
+          type: string
+          format: date
+          example: 2024-04-07
+          description: Data do pedido
+        cliente:
+          type: string
+          example: Bruno
+          description: nome do cliente
+        status:
+          type: string
+          description: determina o status atual do pedido
+          enum:
+            - pago
+            - enviado
+            - aguardando pagamento
+            - cancelado
+        filialOrigem:
+          type: string
+          example: Filial 01
+        valorTotal:
+          type: number
+          example: R$ 100,00
+
+    Pedido:
+      type: object
+      properties:
+        codigo:
+          type: string
+        data:
+          type: string
+          format: date
+        cliente:
+          $ref: '#/components/schemas/Cliente'
+        status:
+          type: string
+          enum: [ pago, enviado, aguardando pagamento, cancelado ]
+        filialOrigem:
+          $ref: '#/components/schemas/Filial'
+        valorTotal:
+          type: number
+          format: float
+        itens:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemPedido'
+
+    Cliente:
+      type: object
+      properties:
+        codigo:
+          type: string
+        nome:
+          type: string
+        cpf:
+          type: string
+
+    Filial:
+      type: object
+      properties:
+        codigo:
+          type: string
+        cep:
+          type: string
+
+    PedidoComItens:
+      allOf:
+        - $ref: '#/components/schemas/Pedido'
+        - type: object
+          properties:
+            itens:
+              type: array
+              items:
+                $ref: '#/components/schemas/ItemPedido'
+
+    ItemPedido:
+      type: object
+      properties:
+        sequencia:
+          type: integer
+        codigoProduto:
+          type: string
+        descricao:
+          type: string
+        quantidade:
+          type: integer
+        valorUnitario:
+          type: number
+          format: float
+        totalItem:
+          type: number
+          format: float
+
+
+    PedidoRequest:
+      type: object
+      properties:
+        codigo:
+          type: string
+          example: 123
+          description: código do pedido
+        data:
+          type: string
+          format: date
+          example: 2024-04-07
+          description: Data do pedido
+        cliente:
+          type: string
+          example: Bruno
+          description: nome do cliente
+        status:
+          type: string
+          description: determina o status atual do pedido
+          enum:
+            - pago
+            - enviado
+            - aguardando pagamento
+            - cancelado
+        filialOrigem:
+          type: string
+          example: Filial 01
+        valorTotal:
+          type: number
+          example: R$ 100,00
