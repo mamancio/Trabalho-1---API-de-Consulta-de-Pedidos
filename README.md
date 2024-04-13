@@ -33,3 +33,7 @@ Tecnologias, ferramentas e API utilizadas no desenvolvimento do projeto:
 
 <br>
 
+## Fontes de pesquisas
+
+ - [PDFs API](https://drive.google.com/drive/folders/18Nc_lfdP5Q1sVr6FQYKon-_Hw9Q8h0Wh?usp=drive_link)
+
