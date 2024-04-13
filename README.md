@@ -23,3 +23,13 @@ As necessidades de filtros para a consulta são:
 * CPF do cliente
 * status
 * data do pedido: maior e menos que
+
+## TECNOLOGIAS
+
+Tecnologias, ferramentas e API utilizadas no desenvolvimento do projeto:
+
+- [VS Code](https://code.visualstudio.com/) com [Yaml](https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html)
+- [API](https://www.redhat.com/en/topics/api/what-is-a-rest-api)
+
+<br>
+
